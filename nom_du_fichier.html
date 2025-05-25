@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arnaud - Créateur Audiovisuel</title>
+    <style>
+        /* Variables CSS pour les thèmes */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #5a6c7d;
+            --accent: #3498db;
+            --accent-hover: #2980b9;
+            --border: #e1e8ed;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Thème sombre */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent: #64b5f6;
+            --accent-hover: #42a5f5;
+            --border: #404040;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Styles généraux */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px; /* Espace pour le header fixe */
+        }
+
+        .hero-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 4rem 0;
+            background: var(--bg-primary);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .about-content h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+            color: var(--text-primary);
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Videos Section */
+        .videos-section {
+            padding: 4rem 0;
+            background: var(--bg-secondary);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent);
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .video-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem; /* Espace entre les éléments de la carte */
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            display: block; /* S'assurer que l'élément prend toute la largeur */
+            object-fit: cover; /* Assurer que la vidéo couvre bien l'espace */
+            border: 1px solid var(--border); /* Petite bordure pour le lecteur */
+        }
+
+        /* Styles spécifiques pour les iframes YouTube/Vimeo */
+        iframe.video-player {
+            width: 100%;
+            height: 200px;
+            border: none; /* Les iframes ont déjà des bordures par défaut */
+            border-radius: 8px;
+        }
+
+
+        .video-title {
+            font-size: 1.2rem;
+            margin-bottom: 0; /* Réinitialiser la marge pour la flexbox */
+            color: var(--text-primary);
+        }
+
+        .video-description {
+            color: var(--text-secondary);
+            margin-bottom: 0; /* Réinitialiser la marge pour la flexbox */
+            font-size: 0.9rem;
+            flex-grow: 1; /* Permet à la description de prendre l'espace restant */
+        }
+
+        .download-btn, .delete-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            text-decoration: none; /* Pour les boutons qui seraient des liens */
+            display: block; /* Assure que le bouton prend toute la largeur */
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            margin-top: 0.5rem; /* Espace entre télécharger et supprimer */
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Admin Panel */
+        .admin-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 16px var(--shadow);
+            transition: all 0.3s ease;
+            display: flex; /* Centrer l'icône */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-toggle:hover {
+            background: var(--accent-hover);
+            transform: scale(1.1);
+        }
+
+        .admin-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px var(--shadow);
+            display: none; /* Caché par défaut */
+            z-index: 1500; /* Au-dessus des éléments normaux */
+            min-width: 250px;
+        }
+
+        .admin-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Plus d'espace entre les contrôles */
+        }
+
+        .admin-controls button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .password-input {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        #adminActions {
+            display: none; /* Caché par défaut, visible après connexion */
+            flex-direction: column; /* Les actions admin empilées */
+            gap: 10px;
+        }
+
+        /* Social Media Section */
+        .social-section {
+            padding: 4rem 0;
+            background: var(--bg-primary);
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Pour s'adapter aux petits écrans */
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .tiktok-link:hover {
+            background: #ff0050;
+            color: white;
+        }
+
+        .snapchat-link:hover {
+            background: #fffc00;
+            color: black;
+        }
+
+        /* Modal */
+        .modal {
+            display: none; /* Caché par défaut */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000; /* Au-dessus de tout le reste */
+            overflow: auto; /* Pour les petits écrans si le contenu est grand */
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .modal h3 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: var(--text-primary);
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-panel, .admin-toggle {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Arnaud</div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    🌙 Thème
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Créateur Audiovisuel</h1>
+                <p class="hero-subtitle">Montage vidéo • Graphisme • Musique libre de droits</p>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <h2>À propos de moi</h2>
+                    <p>Je m'appelle Arnaud, j'ai 16 ans, et je suis passionné par le monde de la création visuelle et audiovisuelle. Depuis plus de trois ans, je me consacre avec rigueur et enthousiasme au montage vidéo ainsi qu'au graphisme.</p>
+
+                    <h3>Mon parcours</h3>
+                    <p>Au fil des années, j'ai eu l'opportunité de collaborer avec de nombreux créateurs talentueux, tels que **Ilerio Graphisme**, **SamEZTwitch**, et bien d'autres encore. Ces expériences m'ont permis de renforcer mes compétences, d'élargir ma vision créative et de m'adapter à des univers artistiques variés.</p>
+
+                    <h3>Mes projets actuels</h3>
+                    <p>Aujourd'hui, je concentre pleinement mon énergie sur la **création de contenu original**, avec un intérêt particulier pour la **musique libre de droits**. Mon objectif est d'offrir aux créateurs des ressources de qualité, utilisables librement dans leurs productions, tout en continuant à innover et à me perfectionner dans mes domaines de prédilection.</p>
+
+                    <p>J'espère que mon travail saura te plaire et, surtout, **je te souhaite d'excellentes créations** ! 🎧✨</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="videos-section">
+            <div class="container">
+                <h2 class="section-title">Mes Créations</h2>
+                <div class="videos-grid" id="videosGrid">
+                    <p style="text-align: center; color: var(--text-secondary);">Chargement des vidéos...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="social-section">
+            <div class="container">
+                <h2 class="section-title">Suivez-moi</h2>
+                <div class="social-links">
+                    <a href="https://tiktok.com/@nartix_official" class="social-link tiktok-link" target="_blank" rel="noopener noreferrer">
+                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                        <span>@nartix_official</span>
+                    </a>
+                    <a href="https://snapchat.com/add/nartix_official" class="social-link snapchat-link" target="_blank" rel="noopener noreferrer">
+                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.404-5.958 1.404-5.958s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.346-.09.375-.292 1.175-.334 1.335-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.748-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.001 12.017.001z"/>
+                        </svg>
+                        <span>nartix_official</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="admin-toggle" onclick="toggleAdmin()">🔧</button>
+
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-controls">
+            <input type="password" id="adminPassword" class="password-input" placeholder="Mot de passe admin">
+            <button onclick="checkAdminAccess()" style="background: var(--accent); color: white;">Se connecter</button>
+            <div id="adminActions">
+                <button onclick="openAddVideoModal()" style="background: #27ae60; color: white;">➕ Ajouter vidéo</button>
+                <button onclick="toggleDeleteMode(event)" style="background: #e74c3c; color: white;">🗑️ Mode suppression</button>
+                <button onclick="logout()" style="background: var(--bg-secondary); color: var(--text-primary);">Déconnexion</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addVideoModal">
+        <div class="modal-content">
+            <h3>Ajouter une nouvelle vidéo</h3>
+            <form onsubmit="addVideo(event)">
+                <div class="form-group">
+                    <label for="videoTitle">Titre de la vidéo:</label>
+                    <input type="text" id="videoTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="videoDescription">Description:</label>
+                    <input type="text" id="videoDescription" required>
+                </div>
+                <div class="form-group" id="videoUrlGroup">
+                    <label for="videoUrl">URL de la vidéo (YouTube, lien direct .mp4, etc.):</label>
+                    <input type="text" id="videoUrl" placeholder="Ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeAddVideoModal()">Annuler</button>
+                    <button type="submit" class="btn-primary">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration JSONBin.io ---
+        // ATTENTION: Exposer la clé API directement dans le code client n'est PAS SÉCURISÉ pour un site public.
+        // Pour une application en production, utilisez un backend pour gérer les requêtes à JSONBin.io.
+        const JSONBIN_URL = "https://api.jsonbin.io/v3/b/683362f28a456b7966a53f6c";
+        const JSONBIN_API_KEY = "$2a$10$oQ5QI1rZSQ/ZqSv.u0dFC.WzKLpiV7NSq.Dp3kCeKe6e2dtzqBIsu";
+
+        // --- Système de Thème ---
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme); // Sauvegarde le thème dans le localStorage
+
+            const themeBtn = document.querySelector('.theme-toggle');
+            themeBtn.textContent = newTheme === 'dark' ? '☀️ Thème' : '🌙 Thème';
+        }
+
+        // Initialise le thème au chargement de la page
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.setAttribute('data-theme', savedTheme);
+                const themeBtn = document.querySelector('.theme-toggle');
+                themeBtn.textContent = savedTheme === 'dark' ? '☀️ Thème' : '🌙 Thème';
+            } else {
+                // Thème par défaut si rien n'est sauvegardé (par exemple, première visite)
+                document.body.setAttribute('data-theme', 'light');
+                document.querySelector('.theme-toggle').textContent = '🌙 Thème';
+            }
+        }
+
+        // --- Gestion des Vidéos et de l'Admin ---
+        let videos = []; // Tableau pour stocker les objets vidéo (métadonnées)
+        let isAdmin = false; // État de connexion admin
+        let deleteMode = false; // État du mode suppression
+        const ADMIN_PASSWORD = "arnaud2024"; // REMPLACEZ CE MOT DE PASSE PAR UNE VALEUR PLUS SÉCURISÉE POUR UN SITE EN LIGNE !
+
+        // Affiche/masque le panneau d'administration
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            const toggleBtn = document.querySelector('.admin-toggle');
+
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+                toggleBtn.style.display = 'none'; // Cache le bouton quand le panneau est ouvert
+            } else {
+                panel.style.display = 'none';
+                toggleBtn.style.display = 'block'; // Affiche le bouton quand le panneau est fermé
+            }
+        }
+
+        // Vérifie le mot de passe admin et gère l'accès
+        function checkAdminAccess() {
+            const passwordInput = document.getElementById('adminPassword');
+            const password = passwordInput.value;
+
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('adminActions').style.display = 'flex'; // Affiche les actions admin
+                passwordInput.style.display = 'none'; // Cache le champ de mot de passe
+                document.querySelector('.admin-controls button[onclick="checkAdminAccess()"]').style.display = 'none'; // Cache le bouton de connexion
+                alert('Connexion administrateur réussie !');
+                renderVideos(); // Re-render les vidéos pour potentiellement afficher les boutons de suppression
+            } else {
+                alert('Mot de passe incorrect !');
+                passwordInput.value = ''; // Efface le mot de passe incorrect
+            }
+        }
+
+        // Déconnecte l'administrateur
+        function logout() {
+            isAdmin = false;
+            deleteMode = false; // Désactive le mode suppression à la déconnexion
+            document.getElementById('adminActions').style.display = 'none'; // Cache les actions admin
+            document.getElementById('adminPassword').style.display = 'block'; // Réaffiche le champ de mot de passe
+            document.getElementById('adminPassword').value = ''; // Efface le mot de passe
+            document.querySelector('.admin-controls button[onclick="checkAdminAccess()"]').style.display = 'block'; // Réaffiche le bouton de connexion
+            toggleAdmin(); // Ferme le panneau admin
+            renderVideos(); // Re-render les vidéos pour cacher les boutons de suppression
+            alert('Déconnexion réussie.');
+        }
+
+        // Active/désactive le mode suppression pour les vidéos
+        function toggleDeleteMode(event) {
+            if (!isAdmin) {
+                alert('Accès refusé !');
+                return;
+            }
+            deleteMode = !deleteMode;
+            renderVideos(); // Re-render les vidéos pour afficher/cacher les boutons de suppression
+
+            const btn = event.target;
+            btn.textContent = deleteMode ? '✅ Annuler suppression' : '🗑️ Mode suppression';
+            btn.style.background = deleteMode ? '#f39c12' : '#e74c3c'; // Change la couleur du bouton
+        }
+
+        // Ouvre le modal pour ajouter une nouvelle vidéo
+        function openAddVideoModal() {
+            if (!isAdmin) {
+                alert('Accès refusé ! Connectez-vous en tant qu\'administrateur.');
+                return;
+            }
+            document.getElementById('addVideoModal').style.display = 'block';
+            // Assure que l'input d'URL est visible et l'input de fichier est caché/retiré si nécessaire
+            const videoFileElement = document.getElementById('videoFile');
+            if (videoFileElement) {
+                videoFileElement.style.display = 'none'; // Cache l'ancien input file
+                videoFileElement.removeAttribute('required'); // Retire l'attribut required
+            }
+            const videoUrlElement = document.getElementById('videoUrl');
+            if (videoUrlElement) {
+                videoUrlElement.style.display = 'block'; // Affiche l'input URL
+                videoUrlElement.setAttribute('required', 'true'); // Ajoute l'attribut required
+            }
+            // Met à jour le label pour l'URL
+            document.querySelector('#addVideoModal .form-group label[for="videoFile"]').textContent = 'URL de la vidéo (YouTube, lien direct .mp4, etc.):';
+        }
+
+        // Ferme le modal d'ajout de vidéo et réinitialise les champs
+        function closeAddVideoModal() {
+            document.getElementById('addVideoModal').style.display = 'none';
+            document.getElementById('videoTitle').value = '';
+            document.getElementById('videoDescription').value = '';
+            const videoUrlInput = document.getElementById('videoUrl');
+            if (videoUrlInput) videoUrlInput.value = ''; // Efface le champ URL
+            // Optionnel: si tu veux réafficher l'input file par défaut après fermeture du modal
+            // const videoFileElement = document.getElementById('videoFile');
+            // if (videoFileElement) {
+            //     videoFileElement.style.display = 'block';
+            //     videoFileElement.setAttribute('required', 'true');
+            // }
+            // document.querySelector('#addVideoModal .form-group label[for="videoFile"]').textContent = 'Fichier vidéo:';
+        }
+
+        // Ajoute une nouvelle vidéo à la liste en utilisant une URL
+        async function addVideo(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const title = document.getElementById('videoTitle').value;
+            const description = document.getElementById('videoDescription').value;
+            const videoUrl = document.getElementById('videoUrl').value; // Récupère l'URL
+
+            if (videoUrl) {
+                const video = {
+                    id: Date.now(), // ID unique (timestamp)
+                    title: title,
+                    description: description,
+                    url: videoUrl // Stocke l'URL de la vidéo
+                };
+
+                videos.push(video); // Ajoute la nouvelle vidéo au tableau
+                await saveVideosToBin(); // Sauvegarde le tableau mis à jour sur JSONBin.io
+                renderVideos(); // Met à jour l'affichage des vidéos
+                closeAddVideoModal(); // Ferme le modal
+                alert('Vidéo ajoutée avec succès !');
+            } else {
+                alert('Veuillez entrer une URL de vidéo.');
+            }
+        }
+
+        // Récupère les vidéos de JSONBin.io
+        async function fetchVideosFromBin() {
+            try {
+                document.getElementById('videosGrid').innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Chargement des vidéos...</p>';
+                const response = await fetch(JSONBIN_URL + '/latest', {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    // Si le bin est vide ou n'existe pas encore, JSONBin.io renvoie un 404
+                    if (response.status === 404) {
+                        console.warn('JSONBin.io bin non trouvé ou vide. Initialisation avec un tableau vide.');
+                        videos = [];
+                        renderVideos(); // Affiche la grille vide
+                        return; // Sort de la fonction
+                    }
+                    throw new Error(`Erreur lors du chargement des vidéos depuis JSONBin.io: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                videos = data.record || []; // JSONBin.io renvoie un objet JSON avec une propriété 'record'
+                console.log('Vidéos chargées depuis JSONBin.io:', videos);
+                renderVideos();
+            } catch (error) {
+                console.error('Erreur de chargement des vidéos:', error);
+                document.getElementById('videosGrid').innerHTML = `<p style="text-align: center; color: red;">Erreur de chargement des vidéos: ${error.message}. Rechargez la page ou contactez l'administrateur.</p>`;
+            }
+        }
+
+        // Sauvegarde les vidéos sur JSONBin.io
+        async function saveVideosToBin() {
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    method: 'PUT', // PUT pour remplacer le contenu existant
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY,
+                        'Content-Type': 'application/json',
+                        'X-Bin-Meta': 'false' // Pour ne pas recevoir les métadonnées dans la réponse
+                    },
+                    body: JSON.stringify(videos)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Erreur lors de la sauvegarde des vidéos sur JSONBin.io: ${response.status} - ${errorText}`);
+                }
+
+                console.log('Vidéos sauvegardées sur JSONBin.io.');
+            } catch (error) {
+                console.error('Erreur de sauvegarde des vidéos:', error);
+                alert(`Impossible de sauvegarder les vidéos : ${error.message}.`);
+            }
+        }
+
+        // Affiche toutes les vidéos dans la grille
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            grid.innerHTML = ''; // Vide la grille avant de la remplir
+
+            if (videos.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Aucune vidéo pour le moment. Ajoutez-en via le panneau admin !</p>';
+                return;
+            }
+
+            videos.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+
+                let videoPlayerHtml = '';
+                // Détermine le type de lecteur en fonction de l'URL
+                if (video.url.includes('youtube.com/watch?v=') || video.url.includes('youtu.be/')) {
+                    // Intégration YouTube
+                    let youtubeId;
+                    if (video.url.includes('youtube.com/watch?v=')) {
+                        youtubeId = video.url.split('v=')[1];
+                        const ampersandPosition = youtubeId.indexOf('&');
+                        if (ampersandPosition !== -1) {
+                            youtubeId = youtubeId.substring(0, ampersandPosition);
+                        }
+                    } else if (video.url.includes('youtu.be/')) {
+                        youtubeId = video.url.split('youtu.be/')[1];
+                        const queryPosition = youtubeId.indexOf('?');
+                        if (queryPosition !== -1) {
+                            youtubeId = youtubeId.substring(0, queryPosition);
+                        }
+                    }
+                    videoPlayerHtml = `<iframe class="video-player" src="https://www.youtube.com/embed/${youtubeId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                } else if (video.url.includes('vimeo.com/')) {
+                    // Intégration Vimeo
+                    const vimeoId = video.url.split('vimeo.com/')[1];
+                    videoPlayerHtml = `<iframe class="video-player" src="https://player.vimeo.com/video/${vimeoId}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+                } else {
+                    // Vidéo directement hébergée (ex: .mp4, .webm)
+                    videoPlayerHtml = `
+                        <video class="video-player" controls>
+                            <source src="${video.url}" type="video/mp4"> Votre navigateur ne supporte pas la lecture vidéo.
+                        </video>
+                    `;
+                }
+
+                videoCard.innerHTML = `
+                    ${videoPlayerHtml}
+                    <h4 class="video-title">${video.title}</h4>
+                    <p class="video-description">${video.description}</p>
+                    <a class="download-btn" href="${video.url}" target="_blank" rel="noopener noreferrer" download="${video.title || 'video'}">
+                        ⬇️ Télécharger (lien externe)
+                    </a>
+                    ${(isAdmin && deleteMode) ? `<button class="delete-btn" onclick="deleteVideo(${video.id})">🗑️ Supprimer</button>` : ''}
+                `;
+                grid.appendChild(videoCard);
+            });
+        }
+
+        // Supprime une vidéo spécifique du tableau et de JSONBin.io
+        async function deleteVideo(videoId) {
+            if (!isAdmin) {
+                alert('Accès refusé !');
+                return;
+            }
+
+            // Utilisation d'un modal personnalisé au lieu de confirm()
+            const userConfirmed = await new Promise(resolve => {
+                const modalDiv = document.createElement('div');
+                modalDiv.className = 'modal';
+                modalDiv.innerHTML = `
+                    <div class="modal-content">
+                        <h3>Confirmation de suppression</h3>
+                        <p>Êtes-vous sûr de vouloir supprimer cette vidéo ? Cette action est irréversible et la retirera du site pour tout le monde.</p>
+                        <div class="form-buttons">
+                            <button type="button" class="btn-secondary" id="cancelDelete">Annuler</button>
+                            <button type="button" class="btn-primary" style="background: #e74c3c;" id="confirmDelete">Supprimer</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modalDiv);
+                modalDiv.style.display = 'block';
+
+                document.getElementById('cancelDelete').onclick = () => {
+                    modalDiv.remove();
+                    resolve(false);
+                };
+                document.getElementById('confirmDelete').onclick = () => {
+                    modalDiv.remove();
+                    resolve(true);
+                };
+                modalDiv.onclick = (event) => { // Fermer si clic en dehors du contenu
+                    if (event.target === modalDiv) {
+                        modalDiv.remove();
+                        resolve(false);
+                    }
+                };
+            });
+
+
+            if (userConfirmed) {
+                videos = videos.filter(v => v.id !== videoId); // Filtre la vidéo à supprimer
+                await saveVideosToBin(); // Sauvegarde les modifications sur JSONBin.io
+                renderVideos(); // Met à jour l'affichage
+                alert('Vidéo supprimée !');
+            }
+        }
+
+        // Télécharge une vidéo spécifique (ou ouvre le lien pour les plateformes de streaming)
+        function downloadVideo(videoId) {
+            const video = videos.find(v => v.id === videoId);
+            if (video && video.url) {
+                if (video.url.includes('youtube.com') || video.url.includes('youtu.be') || video.url.includes('vimeo.com')) {
+                    // Pour YouTube/Vimeo, le téléchargement direct du fichier n'est généralement pas possible.
+                    // On ouvre le lien dans un nouvel onglet.
+                    alert("Pour les vidéos YouTube/Vimeo, le téléchargement se fait via la plateforme elle-même ou en utilisant des outils tiers. Cette action va ouvrir le lien dans un nouvel onglet.");
+                    window.open(video.url, '_blank');
+                } else {
+                    // Pour un lien direct vers un fichier (par exemple, .mp4), on peut tenter le téléchargement direct
+                    const link = document.createElement('a');
+                    link.href = video.url;
+                    // L'attribut download suggère un nom de fichier, mais ne force pas le téléchargement pour toutes les URLs
+                    link.download = video.title ? `${video.title}.mp4` : 'video_download.mp4';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            } else {
+                alert('Vidéo introuvable ou URL de téléchargement non disponible.');
+            }
+        }
+
+        // Ferme le modal si l'utilisateur clique en dehors de son contenu
+        window.onclick = function(event) {
+            const addVideoModal = document.getElementById('addVideoModal');
+            if (event.target === addVideoModal) {
+                closeAddVideoModal();
+            }
+            // Gère aussi la fermeture du modal de confirmation de suppression si tu en as un
+            const confirmModal = document.querySelector('.modal.confirm-modal'); // Si tu lui donnes cette classe
+            if (confirmModal && event.target === confirmModal) {
+                confirmModal.remove(); // Supprime le modal de confirmation
+            }
+        }
+
+        // --- Initialisation au chargement du DOM ---
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme(); // Applique le thème sauvegardé ou par défaut
+            fetchVideosFromBin(); // Charge les vidéos depuis JSONBin.io au démarrage
+
+            // Gestion du défilement fluide pour les ancres
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
